@@ -1,0 +1,13 @@
+.button {
+    position: absolute;
+    top:50%;
+    font-family: "Segoe UI", "Open Sans", sans-serif, Arial;
+    background-color: #006969; /* Green */
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
