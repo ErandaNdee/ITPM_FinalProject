@@ -5,21 +5,21 @@
 			<button class="navbar-toggler toggler-right" data-target="#mynavbar" data-toggle="collapse">
 				<span class="navbar-toggler-icon"></span>
 			</button>
+			<a href="index.php" class="navbar-brand mr-3">Simple Online Leave Management</a>
 			
 		</div>
-		<!-- Designed and developed by Habibur Rahman Mahid -->
 	</nav>
-	<!--This Is Header-->
-	<header id="main-header" class="bg-primary py-2 text-white">
+	
+	<header id="main-header" class="bg-danger py-2 text-white">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6">
-					<h1><i class="fa fa-user"></i> User Login</h1>
+					<h1><i class="fa fa-user-secret"></i> Admin Login</h1>
 				</div>
 			</div>
 		</div>
 	</header>
-	<!--This is section-->
+
 	<section id="sections" class="py-4 mb-4 bg-faded">
 		<div class="container">
 			<div class="row">
@@ -29,6 +29,7 @@
 		</div>
 	
 	</section>
+
 	<section id="post">
 		<div class="container">
 			<div class="row">
@@ -45,9 +46,7 @@
 								<label class="form-control-label">Password</label>
 								<input type="password" name="password" class="form-control"  />
 								<br />
-								<input type="submit" name="submit" class="btn btn-primary" style="border-radius:0%;" value="Log In" />
-
-								<a href="admin/index.php">Admin Login</a>
+								<input type="submit" name="submit" style="border-radius:0%;" class="btn btn-success" value="Log In" />
 							</form>
 						</div>
 					</div>
@@ -55,8 +54,17 @@
 			</div>
 		</div>
 	</section>
-	
-	
+	<br><br><br><br><br><br><br><br><br>
+	<!----Section3 footer ---->
+	<section id="main-footer" class="text-center text-white bg-inverse mt-4 p-4">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+				<p class="lead">&copy; <?php echo date("Y")?> SOLM</p>
+				</div>
+			</div>
+		</div>
+	</section>
 	
   
   <script src="js/jquery.min.js"></script>
@@ -69,7 +77,6 @@
 
 </body>
 </html>
-
 <?php 
 	
 	if(isset($_POST['submit'])){
@@ -80,17 +87,14 @@
 
 		include 'DB/config.php';
 
-		$sql = "SELECT * FROM users WHERE email = '$user' AND password = '$password'";
+		$sql = "SELECT * FROM admin WHERE email = '$user' AND password = '$password'";
 
 		$run = mysqli_query($con,$sql);
 		$check = mysqli_num_rows($run);
 
-		$name = $_GET['name'];
-
 		if($check == 1){
 			session_start();
-			$_SESSION['email'] = $user;
-			
+			$_SESSION['email'] = $user; 
 			echo "<script> 
 					window.open('dashboard.php','_self');
 				  </script>";
