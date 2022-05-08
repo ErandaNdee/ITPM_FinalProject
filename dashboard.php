@@ -1,0 +1,357 @@
+<?php 
+	include('DB/head.php'); 
+	session_start();
+
+	if (isset($_SESSION['email'])) {
+		
+	}
+	else{
+		header('location:index.php');
+	}
+
+?>
+
+<body>
+	
+	
+
+
+	<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+				<div class="p-4 pt-5">
+		  		<a href="#" class="img logo rounded-rectangle mb-20" style="background-image: url(img/Logo.png);"></a>
+	        <ul class="list-unstyled components mb-5">
+	          <li class="active">
+	            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class=""></a>
+	            
+                <li>
+                    <a href="dashboard.php">Leave </a>
+                </li>
+                <li>
+                    <a href="attendace.php">Attendance</a>
+                </li>
+				<li>
+                    <a href="profile.php">Profile</a>
+                </li>
+				
+	            </ul>
+	          </li>
+	          
+              
+
+	        	
+	  
+
+	      </div>
+    	</nav>
+
+        <!-- Page Content  -->
+      <div id="content" class="p-4 p-md-5">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <div class="container-fluid">
+
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+              <i class="fa fa-bars"></i>
+              <span class="sr-only">Toggle Menu</span>
+            </button>
+            <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav">
+					<li class="nav-item px-2"><a href="#" class="nav-link active">Logged in as <?php echo $_SESSION['email']?></a></li>
+					
+				</ul>
+              <ul class="nav navbar-nav ml-auto">
+			  
+                <li class="nav-item active">
+                    <a class="nav-link" href="home1.php">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="attendace.php">Attendance</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="dashboard.php">Leave</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="profile.php">Profile</a>
+                </li>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item dropdown mr-3">
+						
+						<li class="nav-item">
+							<a href="logout.php" class="nav-link"><i class="fa fa-power-off"></i> Logout</a>
+						</li>
+					</li>
+				</ul>
+				
+              </ul>
+            </div>
+          </div>
+        </nav>
+
+	<section id="sections" class="py-4 mb-4 bg-faded">
+		<div class="container">
+			<div class="row">
+				<div class="col-md"></div>
+				<div class="col-md-3">
+					<a href="#" class="btn btn-primary btn-block" style="border-radius:0%;" data-toggle="modal" data-target="#addPostModal"><i class="fa fa-plus"></i> Apply Leave</a>
+				</div>
+				<div class="col-md-3">
+					<a href="#" class="btn btn-warning btn-block" style="border-radius:0%;" data-toggle="modal" data-target="#addCateModal"><i class="fa fa-spinner"></i> Pendings</a>
+				</div>
+				<div class="col-md-3">
+					<a href="#" class="btn btn-success btn-block" style="border-radius:0%;" data-toggle="modal" data-target="#addUsertModal"><i class="fa fa-check"></i> Approved Leaves</a>
+				</div>
+				<div class="col-md"></div>
+			</div>
+		</div>
+	
+	</section>
+	
+	<section id="post">
+		<div class="container">
+			<div class="row">
+			<table class="table table-bordered table-hover table-striped">
+							<thead>
+								<th>#</th>
+								<th>Name</th>
+								<th>Job Type</th>
+								<th>Leave Date</th>
+								<th>Reason</th>
+								<th>Status</th>
+							</thead>
+							 <tbody>
+							 	<?php 
+									$sql = "SELECT * FROM leaves WHERE email='".$_SESSION['email']."'";
+									$que = mysqli_query($con,$sql);
+									$cnt=1;
+									while ($result = mysqli_fetch_assoc($que)) {
+									?>
+
+									
+							 	<tr>
+									<td><?php echo $cnt;?></td>
+							 		<td><?php echo $result['name']; ?></td>
+							 		<td><?php echo $result['department']; ?></td>
+							 		<td><?php echo $result['leavedate']; ?></td>
+							 		<td><?php echo $result['leavereason']; ?></td>
+							 		<td>
+							 			<?php 
+							 			if ($result['status'] == 0) {
+							 				echo "<span class='badge badge-warning'>Pending</span>";
+							 			}
+							 			else{
+							 				echo "<span class='badge badge-success'>Approved</span>";
+							 			}
+							 	$cnt++;	}
+							 		 ?>
+							 		</td>
+							 	</tr>
+
+							 </tbody>
+						</table>
+			</div>
+		</div>
+
+	
+	
+	<div class="modal fade" id="addPostModal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header bg-primary text-white">
+					<div class="modal-title">
+						<h5>Apply Leave</h5>
+					</div>
+					<button class="close" data-dismiss="modal"><span>&times;</span></button>
+				</div>
+				<div class="modal-body">
+					<form action="" method="post">
+						<div class="form-group">
+							<label class="form-control-label">Name</label>
+							<input type="text" name="name" class="form-control"/>
+							<input type="hidden" name="email" value="<?php echo $_SESSION['email']?>">
+							<label class="form-control-label">Job Type</label>
+							<select name="department" class="form-control" >
+								<option value="HR">Store Keeper</option>
+								<option value="Marketing">Rider</option>
+								<option value="Development">Manager</option>
+								<option value="Finance">Finance</option>
+								<option value="Customer Support">Customer Support</option>
+							</select>
+						</div>
+						
+						<div class="form-group">
+							<label class="form-control-label">Leave Date</label>
+							<input type="date" name="leavedate" class="form-control" />
+						</div>
+						<div class="form-group">
+							<label>Reason For Leave</label>
+							<textarea name="editor1" class="form-control"></textarea>
+						</div>
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-danger" style="border-radius:0%;" data-dismiss="modal">Close</button>
+					<input type="hidden" name="status" value="0">
+					<input type="submit" class="btn btn-success" style="border-radius:0%;" name="apply"  value="Apply">
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+	<!--Modal Category-->
+	<div class="modal fade" id="addCateModal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header bg-warning text-white">
+					<div class="modal-title">
+						<h5>Pending Leaves</h5>
+					</div>
+					<button class="close" data-dismiss="modal"><span>&times;</span></button>
+				</div>
+				<div class="modal-body">
+				<table class="table table-bordered table-hover table-striped">
+							<thead>
+								<th>No</th>
+								<th>Name</th>
+								<th>Job Type</th>
+								<th>Leave Date</th>
+								<th>Reason</th>
+								<th>Status</th>
+							</thead>
+							 <tbody>
+							 	<?php 
+									$sql = "SELECT * FROM leaves WHERE status = 0 && email='".$_SESSION['email']."'";
+									$que = mysqli_query($con,$sql);
+									$cnt=1;
+									while ($result = mysqli_fetch_assoc($que)) {
+									?>
+
+									
+							 	<tr>
+									<td><?php echo $cnt;?></td>
+							 		<td><?php echo $result['name']; ?></td>
+							 		<td><?php echo $result['department']; ?></td>
+							 		<td><?php echo $result['leavedate']; ?></td>
+							 		<td><?php echo $result['leavereason']; ?></td>
+							 		<td>
+							 			<?php 
+							 			if ($result['status'] == 0) {
+											echo "<span class='badge badge-warning'>Pending</span>";
+							 			}
+							 			else{
+											echo "<span class='badge badge-success'>Approved</span>";
+							 			}
+							 	$cnt++;	}
+							 		 ?>
+							 		</td>
+							 	</tr>
+
+							 </tbody>
+						</table>
+					
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<!-- User Modal -->
+	<div class="modal fade" id="addUsertModal">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header bg-success text-white">
+					<div class="modal-title">
+						<h5>Total Approved Leaves</h5>
+					</div>
+					<button class="close" data-dismiss="modal"><span>&times;</span></button>
+				</div>
+				<div class="modal-body">
+				<table class="table table-bordered table-hover table-striped">
+							<thead>
+								<th>#</th>
+								<th>Name</th>
+								<th>Job Type</th>
+								<th>Leave Date</th>
+								<th>Reason</th>
+								<th>Status</th>
+							</thead>
+							 <tbody>
+							 	<?php 
+									$sql = "SELECT * FROM leaves WHERE status = 1 AND email='".$_SESSION['email']."'";
+									$que = mysqli_query($con,$sql);
+									$cnt=1;
+									while ($result = mysqli_fetch_assoc($que)) {
+									?>
+
+									
+							 	<tr>
+									<td><?php echo $cnt;?></td>
+							 		<td><?php echo $result['name']; ?></td>
+							 		<td><?php echo $result['department']; ?></td>
+							 		<td><?php echo $result['leavedate']; ?></td>
+							 		<td><?php echo $result['leavereason']; ?></td>
+							 		<td>
+							 			<?php 
+							 			if ($result['status'] == 0) {
+											echo "<span class='badge badge-warning'>Pending</span>";
+							 			}
+							 			else{
+											echo "<span class='badge badge-success'>Approved</span>";
+							 			}
+							 	$cnt++;	}
+							 		 ?>
+							 		</td>
+							 	</tr>
+
+							 </tbody>
+						</table>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+	<script src="admin/js/home.js"></script>
+
+<script src="admin/js/jquery.min.js"></script>
+<script src="admin/js/popper.js"></script>
+<script src="admin/js/bootstrap.min.js"></script>
+<script src="admin/js/main.js"></script>
+  
+<script src="js/jquery1.min.js"></script>
+  <script src="js/tether1.min.js"></script>
+  <script src="js/bootstrap1.min.js"></script>
+  <script src="https://cdn.ckeditor.com/4.9.1/standard/ckeditor.js"></script>
+  <script>
+	CKEDITOR.replace('editor1');
+  </script>
+</body>
+</html>
+<?php 
+	if (isset($_POST['apply'])){
+		$name = $_POST['name'];
+		$email = $_POST['email'];
+		$department = $_POST['department'];
+		$leavedate = $_POST['leavedate'];
+		$editor1 = $_POST['editor1'];
+		$status = $_POST['status'];
+
+		$sql = "INSERT INTO leaves(name,email,department,leavedate,leavereason,status)VALUES('$name','$email','$department','$leavedate','$editor1','$status')";
+
+		$run = mysqli_query($con,$sql);
+
+		if($run == true){
+			
+			echo "<script> 
+					alert('Leave Requested, Please wait for approval status');
+					window.open('dashboard.php','_self');
+				  </script>";
+		}else{
+			echo "<script> 
+			alert('Failed To Apply');
+			</script>";
+		}
+	}
+	
+ ?>
